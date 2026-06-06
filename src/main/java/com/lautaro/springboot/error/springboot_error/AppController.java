@@ -1,0 +1,13 @@
+package com.lautaro.springboot.error.springboot_error;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class AppController {
+
+    @GetMapping("/app")
+    public String index() {
+        return "OK 200!";
+    }
+}
