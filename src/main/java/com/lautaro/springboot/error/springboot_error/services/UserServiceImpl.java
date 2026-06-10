@@ -14,8 +14,8 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(List<User> users) {
         this.users = new ArrayList<>();
-        users.add(new User(1, "Lautaro", "Gomez"));
-        users.add(new User(2, "Maria", "Perez"));             
+        users.add(new User(1L, "Lautaro", "Gomez"));
+        users.add(new User(2L, "Maria", "Perez"));             
     }
 
     @Override
@@ -24,10 +24,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(long id) {
+    public User findById(Long id) {
         User user = null;
         for (User u : users) {
-            if (u.getId() == id) {
+            if (u.getId().equals(id)) {
                 user = u;
                 break;
             }

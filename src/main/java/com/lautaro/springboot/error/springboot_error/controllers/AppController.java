@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lautaro.springboot.error.springboot_error.exceptions.UserNotFoundException;
 import com.lautaro.springboot.error.springboot_error.models.domain.User;
 import com.lautaro.springboot.error.springboot_error.services.UserService;
 
@@ -22,7 +23,7 @@ public class AppController {
     @GetMapping
     public String index() {
         //int value = 100 / 0;
-        int value = Integer.parseInt("10");
+        int value = Integer.parseInt("10x");
         System.out.println(value);
         return "OK 200!";
     }
@@ -30,6 +31,9 @@ public class AppController {
     @GetMapping("/show/{id}")
     public User show(@PathVariable(name = "id")Long id) {
         User user = service.findById(id);
+        if(user==null) {
+            throw new UserNotFoundException("User with id: " + id + " not found");
+        }
         System.out.println(user.getName());
         return user;
     }

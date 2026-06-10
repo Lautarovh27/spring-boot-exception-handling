@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.lautaro.springboot.error.springboot_error.exceptions.UserNotFoundException;
 import com.lautaro.springboot.error.springboot_error.models.Error;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,14 +32,30 @@ public class HandlerExceptionController {
 
     @ExceptionHandler(NumberFormatException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> numberFormatException(Exception ex) {
-        Map<String, String> error = new HashMap<>();
+    public Map<String, Object> numberFormatException(Exception ex) {
+        Map<String, Object> error = new HashMap<>();
         error.put("date", new Date().toString());
         error.put("error", "Number format exception, invalid number");
         error.put("message", ex.getMessage());
-        error.put("status", String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        error.put("status",HttpStatus.INTERNAL_SERVER_ERROR.value());
         return error;
     }
+
+    @ExceptionHandler({NullPointerException.class,
+        HttpMessageNotWritableException.class,
+        UserNotFoundException.class
+    })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, Object> nullPointerException(Exception ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("date", new Date().toString());
+        error.put("error", "Null pointer exception");
+        error.put("message", ex.getMessage());
+        error.put("status",HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return error;
+    }
+
+
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResponseEntity<Error> notFound(NoHandlerFoundException ex) {
